@@ -15,5 +15,5 @@ LANGUAGES   += bash
 BINARIES    += vcddiff
 SOURCES     += main.c++
 
-TESTSRC     += counter-same.bash
-TESTSRC     += counter-1diff.bash
+TESTSRC     += counter-0sig0diff.bash
+TESTSRC     += counter-0sig1diff.bash
