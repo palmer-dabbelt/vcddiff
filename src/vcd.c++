@@ -179,9 +179,6 @@ bool diff_this_cycle(const vcd &a, const vcd &b,
 {
     bool out = true;
 
-    if (a._cycle != b._cycle) {
-    }
-
     for (auto it = a._long_name.begin(); it != a._long_name.end(); it++) {
         /* Lookup the cooresponding value in the other VCD -- this
          * won't fail because it's required to have already checked
