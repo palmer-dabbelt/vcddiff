@@ -1,5 +1,13 @@
 set -ex
 
+if [[ "$1" == "" ]]
+then
+    if [[ "$(which valgrind)" != "" ]]
+    then
+        $0 --valgrind
+    fi
+fi
+
 export TMP="$(mktemp -d -t vcddiff-test.XXXXXXXXXX)"
 trap "rm -rf $TMP" EXIT
 
@@ -12,8 +20,21 @@ ARCHIVE=`awk '/^__ARCHIVE_BELOW__/ {print NR + 1; exit 0; }' $0`
 tail -n+$ARCHIVE $0 | bash -ex
 
 set +e
-$PTEST_BINARY $TMPA $TMPB > $TMP/out
-echo "$?" > $TMP/ret
+
+if [[ "$1" == "--valgrind" ]]
+then
+    valgrind -q $PTEST_BINARY $TMPA $TMPB > $TMP/out 2> $TMP/valgrind
+    echo "$?" > $TMP/ret
+    
+    if [[ "$(cat $TMP/valgrind | wc -l)" != 0 ]]
+    then
+        exit 1
+    fi
+else
+    $PTEST_BINARY $TMPA $TMPB > $TMP/out
+    echo "$?" > $TMP/ret
+fi
+
 set -e
 
 if [[ "$(diff $RETGOLD $TMP/ret)" != "" ]]
