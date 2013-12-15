@@ -9,6 +9,9 @@ COMPILEOPTS += -std=c++11
 # The test scripts use BASH
 LANGUAGES   += bash
 
+# Generates a C version number and verifies that it matches git
+GENERATE    += version.h
+
 # Performs a logical diff on two VCD files, determining if they
 # contain the same set of changes (but not necessiarally in exactly
 # the same order.

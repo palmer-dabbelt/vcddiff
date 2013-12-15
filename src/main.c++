@@ -20,6 +20,7 @@
  */
 
 #include "vcd.h++"
+#include "version.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -41,6 +42,11 @@ static void val_diff(const std::string signal) __attribute__((unused));
 
 int main(int argc, const char **argv)
 {
+    if (argc == 2 && (strcmp(argv[1], "--version") == 0)) {
+        printf("vcddiff " VCDDIFF_VERSION "\n");
+        exit(0);
+    }
+
     if ((argc == 2 && (strcmp(argv[1], "--help") == 0)) || argc != 3) {
         printf("vcddiff <a.vcd> <b.vcd>: diffs two VCD files\n"
                "  vcddiff is like diff, but it understands some VCD\n"
