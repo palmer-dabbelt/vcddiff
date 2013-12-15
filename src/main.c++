@@ -52,6 +52,9 @@ int main(int argc, const char **argv)
                "  vcddiff is like diff, but it understands some VCD\n"
                "  semantics.  As such, it can deal with differently\n"
                "  named and ordered signals.\n"
+               "\n"
+               "  --version: Print the version number and exit\n"
+               "  --help:    Print this help text and exit\n"
             );
         exit(0);
     }
