@@ -22,6 +22,7 @@
 #include "vcd.h++"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 /* This global signal determines if we should print the current cycle
  * number of not. */
@@ -40,8 +41,12 @@ static void val_diff(const std::string signal) __attribute__((unused));
 
 int main(int argc, const char **argv)
 {
-    if (argc != 3) {
-        fprintf(stderr, "vcddiff <a.vcd> <b.vcd>: diffs two VCD files\n");
+    if ((argc == 2 && (strcmp(argv[1], "--help") == 0)) || argc != 3) {
+        printf("vcddiff <a.vcd> <b.vcd>: diffs two VCD files\n"
+               "  vcddiff is like diff, but it understands some VCD\n"
+               "  semantics.  As such, it can deal with differently\n"
+               "  named and ordered signals.\n"
+            );
         exit(0);
     }
 
