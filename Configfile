@@ -1,0 +1,19 @@
+# I'm super paranoid about C++ code... :)
+LANGUAGES   += c++
+COMPILEOPTS += -Wall
+COMPILEOPTS += -Wextra
+COMPILEOPTS += -Werror
+COMPILEOPTS += -pedantic
+COMPILEOPTS += -std=c++11
+
+# The test scripts use BASH
+LANGUAGES   += bash
+
+# Performs a logical diff on two VCD files, determining if they
+# contain the same set of changes (but not necessiarally in exactly
+# the same order.
+BINARIES    += vcddiff
+SOURCES     += main.c++
+
+TESTSRC     += counter-same.bash
+TESTSRC     += counter-1diff.bash
