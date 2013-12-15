@@ -1,0 +1,13 @@
+vcddiff
+
+A tool that allows VCD files to be logically diffed.
+
+* Building
+
+vcddiff uses pconfigure as a build system.
+
+http://github.com/palmer-dabbelt/pconfigure
+
+* Running
+
+`./bin/vcddiff --help` should be sufficient...
