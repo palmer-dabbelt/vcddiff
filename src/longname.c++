@@ -75,7 +75,11 @@ const char *longname::c_str(const char *ending) const
     c_str_help(buffer);
 
     char *out;
-    asprintf(&out, "%s::%s", buffer, ending);
+    if (asprintf(&out, "%s::%s", buffer, ending) == -1) {
+        perror("asprintf falied");
+        abort();
+    }
+
     return out;
 }
 
