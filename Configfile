@@ -9,8 +9,14 @@ COMPILEOPTS += -std=c++11
 # The test scripts use BASH
 LANGUAGES   += bash
 
+LANGUAGES   += h
+
+LANGUAGES   += pkgconfig
+LINKOPTS    += -Sobj/proc/version-pc.sed
+
 # Generates a C version number and verifies that it matches git
 GENERATE    += version.h
+GENERATE    += version-pc.sed
 
 # Performs a logical diff on two VCD files, determining if they
 # contain the same set of changes (but not necessiarally in exactly
@@ -23,3 +29,16 @@ TESTSRC     += counter-0sig1diff.bash
 TESTSRC     += counter-0sig2diff.bash
 TESTSRC     += counter-1sig0diff.bash
 TESTSRC     += counter-1sig1diff.bash
+
+# Builds a library that exposes some of the useful VCD functionality
+# that I've written.
+HEADERS     += libvcd/datum.h++
+SOURCES     += datum.h++
+HEADERS     += libvcd/vcd.h++
+SOURCES     += vcd.h++
+
+LIBRARIES   += libvcd.so
+SOURCES     += vcd.c++
+
+LIBRARIES   += pkgconfig/libvcd.pc
+SOURCES     += libvcd.pc

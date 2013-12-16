@@ -1,0 +1,11 @@
+prefix=@@pconfigure_prefix@@
+exec_prefix=@@pconfigure_prefix@@
+libdir=${prefix}/@@pconfigure_libdir@@
+includedir=${prefix}/@@pconfigure_hdrdir@@
+
+Name: libvcd
+Description: Some helper functions for VCD manipulation
+Version: @@libvcd_version@@
+Libs: -Wl,-rpath,${libdir} -L${libdir} -lvcd
+Cflags: -I${includedir} 
+URL: http://github.com/palmer-dabbelt/vcddiff/
