@@ -185,6 +185,13 @@ bool diff_this_cycle(const vcd &a, const vcd &b,
          * that the signal map is the same. */
         auto lookup = b._long_name.find((*it).first);
         if (lookup == b._long_name.end()) {
+            /* Any signal that doesn't have a value yet isn't even looked
+             * at -- this prevents spurious signals (ones that are defined
+             * in the VCD file but never assigned to) from breaking the
+             * diff a whole lot. */
+            if (!(*it).second->valid())
+                continue;
+
             fprintf(stderr, "Mismatched signal '%s'\n", (*it).first.c_str());
             abort();
         }

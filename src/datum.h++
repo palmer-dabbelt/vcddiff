@@ -58,6 +58,10 @@ public:
     friend bool operator!=(const datum &a, const datum &b) { return !(a == b); }
 
     friend bool help_equal(const datum &a, const datum &b);
+
+    /* Returns TRUE whenever this is valid, in other words it has been
+     * set to a value. */
+    bool valid(void) const { return _valid; }
 };
 
 #endif
