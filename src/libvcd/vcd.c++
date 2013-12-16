@@ -22,6 +22,8 @@
 #include "vcd.h++"
 #include <string.h>
 
+using namespace libvcd;
+
 #ifndef LINE_MAX
 #define LINE_MAX 1024
 #endif
@@ -170,12 +172,12 @@ void vcd::step(void)
     }
 }
 
-bool diff_this_cycle(const vcd &a, const vcd &b,
-                    void (*val)(const std::string s,
-                                const std::string a,
-                                const std::string b,
-                                size_t a_cycle,
-                                size_t b_cycle))
+bool vcd::diff_this_cycle(const vcd &a, const vcd &b,
+                     void (*val)(const std::string s,
+                                 const std::string a,
+                                 const std::string b,
+                                 size_t a_cycle,
+                                 size_t b_cycle))
 {
     bool out = true;
 

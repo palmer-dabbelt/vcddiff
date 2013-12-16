@@ -19,11 +19,11 @@
  * along with vcddiff.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "vcd.h++"
-#include "version.h"
+#include <libvcd/vcd.h++>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "version.h"
 
 /* This global signal determines if we should print the current cycle
  * number of not. */
@@ -60,8 +60,8 @@ int main(int argc, const char **argv)
     }
 
     /* Open the two files that we were given. */
-    vcd a(argv[1]);
-    vcd b(argv[2]);
+    libvcd::vcd a(argv[1]);
+    libvcd::vcd b(argv[2]);
 
     /* Read the given files all the way through. */
     bool any_failures = false;
@@ -72,7 +72,7 @@ int main(int argc, const char **argv)
 
         /* Checks for differences between these two functions. */
         has_printed_cycle = false;
-        if (diff_this_cycle(a, b, &sig_diff) == false)
+        if (libvcd::vcd::diff_this_cycle(a, b, &sig_diff) == false)
             any_failures = true;
     }
 

@@ -25,25 +25,30 @@
 #define LONGNAME_HXX
 
 /* Holds the long name of a signal. */
-class longname
+namespace libvcd
 {
-private:
-    const std::string _name;
-    const longname *_parent;
+    class longname
+    {
+    private:
+        const std::string _name;
+        const longname *_parent;
 
-public:
-    longname(const std::string name);
-    longname(const std::string name, const longname *parent);
+    public:
+        longname(const std::string name);
+        longname(const std::string name, const longname *parent);
 
-    friend bool operator==(const longname &a, const longname &b);
+        friend bool operator==(const longname &a, const longname &b);
 
-    const longname *parent(void) const { return _parent; }
+        const longname *parent(void) const { return _parent; }
 
-    void print(FILE *f) const;
+        void print(FILE *f) const;
 
-    const char *c_str(const char *end) const;
-private:
-    void c_str_help(char *pbuf) const;
-};
+        const char *c_str(const char *end) const;
+    private:
+        void c_str_help(char *pbuf) const;
+    };
+
+    bool operator==(const longname &a, const longname &b);
+}
 
 #endif

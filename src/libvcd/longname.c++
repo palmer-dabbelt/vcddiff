@@ -22,6 +22,8 @@
 #include "longname.h++"
 #include <string.h>
 
+using namespace libvcd;
+
 #ifndef LINE_MAX
 #define LINE_MAX 1024
 #endif
@@ -38,7 +40,7 @@ longname::longname(const std::string name, const longname *parent)
 {
 }
 
-bool operator==(const longname &a, const longname &b)
+bool libvcd::operator==(const longname &a, const longname &b)
 {
     fprintf(stderr, "Testing Equality: ");
     a.print(stderr);

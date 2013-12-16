@@ -22,6 +22,8 @@
 #include "datum.h++"
 #include <string.h>
 
+using namespace libvcd;
+
 datum::datum(void)
     : _valid(false),
       _text("X")
@@ -41,7 +43,7 @@ datum& datum::operator=(const std::string new_text)
     return *this;
 }
 
-bool operator==(const datum &a, const datum &b)
+bool libvcd::operator==(const datum &a, const datum &b)
 {
     /* If one is valid and the other isn't then bail out. */
     if (a._valid != b._valid)
