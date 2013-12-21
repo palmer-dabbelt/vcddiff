@@ -127,7 +127,7 @@ void vcd::step(void)
     this->_has_more_cycles = false;
     this->_cycle = this->_next_cycle;
 
-    /* Read the input ile until we find another cycle deliminator.  If
+    /* Read the input file until we find another cycle deliminator.  If
      * we don't find one then that means the file is over, which is OK
      * because we've just invalidated our cache. */
     char buffer[LINE_MAX];
@@ -143,9 +143,14 @@ void vcd::step(void)
             return;
         }
 
-        /* The line wasn't a cycle deliminator, which means it must
-         * (maybe? I should read the VCD spec... :)) be a value/name
-         * pair.  Parse it as such. */
+        /* Check if this looks like a comment and if so skip the
+         * line. */
+        if (str_start(buffer, "$comment"))
+            continue;
+
+        /* If there's no special case to deal with then just go ahead
+         * and assume this is a name/value pair and parse it as
+         * such. */
         char name[LINE_MAX];
         char value[LINE_MAX];
         if (sscanf(buffer, "%s %s", value, name) != 2) {
