@@ -26,6 +26,7 @@ then
     valgrind -q $PTEST_BINARY $TMPA $TMPB > $TMP/out 2> $TMP/valgrind
     echo "$?" > $TMP/ret
     
+    cat $TMP/valgrind
     if [[ "$(cat $TMP/valgrind | wc -l)" != 0 ]]
     then
         exit 1
