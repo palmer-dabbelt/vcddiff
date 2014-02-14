@@ -199,7 +199,17 @@ bool vcd::diff_this_cycle(const vcd &a, const vcd &b,
             if (!(*it).second->valid())
                 continue;
 
+            /* Allow mismatched signals when neither value has ever
+             * changed.  Some implementations will optimize away
+             * constants and not stick them in the VCD at all, this
+             * deals with that fact. */
+            if (!(*it).second->changed())
+                continue;
+
             fprintf(stderr, "Mismatched signal '%s'\n", (*it).first.c_str());
+            fprintf(stderr, " a_cycle: %lu\n", a._cycle);
+            fprintf(stderr, " b_cycle: %lu\n", b._cycle);
+            fprintf(stderr, " a_chg:   %d\n",  (*it).second->changed());
             abort();
         }
 

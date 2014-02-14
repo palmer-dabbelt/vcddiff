@@ -35,6 +35,10 @@ namespace libvcd
          * otherwise. */
         bool _valid;
 
+        /* This is TRUE when this datum has ever changed, and FALSE
+         * otherwise. */
+        bool _changed;
+
         /* The text string that shows up in the VCD file. */
         std::string _text;
 
@@ -66,6 +70,10 @@ namespace libvcd
         /* Returns TRUE whenever this is valid, in other words it has
          * been set to a value. */
         bool valid(void) const { return _valid; }
+
+        /* Returns TRUE if this values has ever changed, which means
+         * it's been set when it's already been valid. */
+        bool changed(void) const { return _changed; }
     };
 
     bool operator==(const datum &a, const datum &b);

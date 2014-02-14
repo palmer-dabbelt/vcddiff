@@ -26,18 +26,21 @@ using namespace libvcd;
 
 datum::datum(void)
     : _valid(false),
+      _changed(false),
       _text("X")
 {
 }
 
 datum::datum(const std::string text)
     : _valid(true),
+      _changed(false),
       _text(text)
 {
 }
 
 datum& datum::operator=(const std::string new_text)
 {
+    this->_changed = this->_valid;
     this->_valid = true;
     this->_text = new_text;
     return *this;
