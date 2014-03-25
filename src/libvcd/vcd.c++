@@ -59,7 +59,9 @@ vcd::vcd(const std::string filename)
     while (fgets(buffer, LINE_MAX, _file) != NULL) {
         line++;
 
-        if (str_start(buffer, "$var")) {
+        if (str_start(buffer, "$comment")) {
+            continue;
+        } else if (str_start(buffer, "$var")) {
             char w[LINE_MAX], s[LINE_MAX], l[LINE_MAX];
 
             if (sscanf(buffer, "$var wire %s %s %s $end", w, s, l) != 3) {
