@@ -55,7 +55,10 @@ vcd::vcd(const std::string filename)
     const longname *stack = NULL;
 
     char buffer[LINE_MAX];
+    size_t line = 0;
     while (fgets(buffer, LINE_MAX, _file) != NULL) {
+        line++;
+
         if (str_start(buffer, "$var")) {
             char w[LINE_MAX], s[LINE_MAX], l[LINE_MAX];
 
@@ -80,7 +83,7 @@ vcd::vcd(const std::string filename)
             stack = new longname(strdup(module), stack);
         } else if (str_start(buffer, "$upscope ")) {
             if (stack == NULL) {
-                fprintf(stderr, "Too many upscope\n");
+                fprintf(stderr, "Too many upscope at line %lu\n", line);
                 abort();
             }
 
