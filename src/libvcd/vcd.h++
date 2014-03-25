@@ -1,6 +1,6 @@
 
 /*
- * Copyright (C) 2013 Palmer Dabbelt
+ * Copyright (C) 2013, 2014 Palmer Dabbelt
  *   <palmer@dabbelt.com>
  *
  * This file is part of vcddiff.
@@ -25,8 +25,9 @@
 #include "datum.h++"
 #include "longname.h++"
 #include <map>
-#include <stdio.h>
 #include <string>
+#include <vector>
+#include <stdio.h>
 
 namespace libvcd
 {
@@ -91,6 +92,9 @@ namespace libvcd
         /* Returns TRUE if these two VCDs are on the same step, and FALSE
          * otherwise. */
         friend bool same_step(const vcd &a, const vcd &b);
+
+        /* Returns a list of every signal in this VCD file. */
+        std::vector<std::string> all_long_names(void) const;
     };
 }
 

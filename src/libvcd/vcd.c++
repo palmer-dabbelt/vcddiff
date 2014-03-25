@@ -1,6 +1,6 @@
 
 /*
- * Copyright (C) 2013 Palmer Dabbelt
+ * Copyright (C) 2013, 2014 Palmer Dabbelt
  *   <palmer@dabbelt.com>
  *
  * This file is part of vcddiff.
@@ -223,6 +223,16 @@ bool vcd::diff_this_cycle(const vcd &a, const vcd &b,
             out = false;
         }
     }
+
+    return out;
+}
+
+std::vector<std::string> vcd::all_long_names(void) const
+{
+    std::vector<std::string> out;
+
+    for (const auto& pair : this->_long_name)
+        out.push_back(pair.first);
 
     return out;
 }
