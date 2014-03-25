@@ -49,3 +49,6 @@ TESTSRC     += counter-0sig2diff.bash
 TESTSRC     += counter-1sig0diff.bash
 TESTSRC     += counter-1sig1diff.bash
 
+# Lists the signals present in a VCD file
+BINARIES    += vcdsigs
+SOURCES     += vcdsigs.c++
