@@ -32,6 +32,8 @@ using namespace libvcd;
 #ifndef SIZET_FORMAT
 #if defined(__amd64__) && defined(__linux__)
 #define SIZET_FORMAT "%lu"
+#elif defined(__i386__) && defined(__linux__)
+#define SIZET_FORMAT "%u"
 #elif defined(__amd64__) && defined(__APPLE__)
 #define SIZET_FORMAT "%lu"
 #else
