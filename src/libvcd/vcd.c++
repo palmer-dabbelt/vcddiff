@@ -90,7 +90,8 @@ vcd::vcd(const std::string filename)
             stack = new longname(strdup(module), stack);
         } else if (str_start(buffer, "$upscope ")) {
             if (stack == NULL) {
-                fprintf(stderr, "Too many upscope at line %lu\n", line);
+                fprintf(stderr, "Too many upscope at line " SIZET_FORMAT "\n",
+                        line);
                 abort();
             }
 
@@ -217,8 +218,8 @@ bool vcd::diff_this_cycle(const vcd &a, const vcd &b,
                 continue;
 
             fprintf(stderr, "Mismatched signal '%s'\n", (*it).first.c_str());
-            fprintf(stderr, " a_cycle: %lu\n", a._cycle);
-            fprintf(stderr, " b_cycle: %lu\n", b._cycle);
+            fprintf(stderr, " a_cycle: " SIZET_FORMAT "\n", a._cycle);
+            fprintf(stderr, " b_cycle: " SIZET_FORMAT "\n", b._cycle);
             fprintf(stderr, " a_chg:   %d\n",  (*it).second->changed());
             abort();
         }
