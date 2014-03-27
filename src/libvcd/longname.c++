@@ -20,6 +20,7 @@
  */
 
 #include "longname.h++"
+#include <stdlib.h>
 #include <string.h>
 
 using namespace libvcd;
