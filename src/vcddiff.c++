@@ -20,6 +20,7 @@
  */
 
 #include <libvcd/vcd.h++>
+#include <libvcd/sizet_format.h++>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -97,7 +98,7 @@ void sig_diff(const std::string signal,
 {
     if (has_printed_cycle == false) {
         has_printed_cycle = true;
-        printf("@%lu, %lu\n", a_cycle, b_cycle);
+        printf("@" SIZET_FORMAT ", " SIZET_FORMAT "\n", a_cycle, b_cycle);
     }
 
     printf("-%s %s\n", signal.c_str(), a.c_str());
