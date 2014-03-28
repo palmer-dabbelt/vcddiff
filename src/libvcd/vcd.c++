@@ -20,6 +20,7 @@
  */
 
 #include "vcd.h++"
+#include "sizet_format.h++"
 #include <stdlib.h>
 #include <string.h>
 
@@ -27,18 +28,6 @@ using namespace libvcd;
 
 #ifndef LINE_MAX
 #define LINE_MAX 1024
-#endif
-
-#ifndef SIZET_FORMAT
-#if defined(__amd64__) && defined(__linux__)
-#define SIZET_FORMAT "%lu"
-#elif defined(__i386__) && defined(__linux__)
-#define SIZET_FORMAT "%u"
-#elif defined(__amd64__) && defined(__APPLE__)
-#define SIZET_FORMAT "%lu"
-#else
-#error "define SIZET_FORMAT on this platform"
-#endif
 #endif
 
 /* Returns TRUE if haystack starts with needle. */
