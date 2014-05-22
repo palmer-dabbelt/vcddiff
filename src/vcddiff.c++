@@ -30,6 +30,13 @@
  * number of not. */
 bool has_printed_cycle;
 
+/* This global signal determines if we should print out the file
+ * mapping or not. */
+bool any_failures;
+
+/* The names of the input files. */
+std::string a_filename, b_filename;
+
 /* These two functions get called whenever there's a differing signal
  * or value between the two given files. */
 static void sig_diff(const std::string signal,
@@ -60,12 +67,15 @@ int main(int argc, const char **argv)
         exit(0);
     }
 
+    a_filename = argv[1];
+    b_filename = argv[2];
+
     /* Open the two files that we were given. */
-    libvcd::vcd a(argv[1]);
-    libvcd::vcd b(argv[2]);
+    libvcd::vcd a(a_filename);
+    libvcd::vcd b(b_filename);
 
     /* Read the given files all the way through. */
-    bool any_failures = false;
+    any_failures = false;
     while (a.has_more_cycles() && b.has_more_cycles()) {
         /* Here's where we move to the next cycle. */
         a.step();
@@ -96,6 +106,12 @@ void sig_diff(const std::string signal,
               size_t a_cycle,
               size_t b_cycle)
 {
+    if (any_failures == false) {
+        any_failures = true;
+        printf("--- %s\n", a_filename.c_str());
+        printf("+++ %s\n", b_filename.c_str());
+    }
+
     if (has_printed_cycle == false) {
         has_printed_cycle = true;
         printf("@" SIZET_FORMAT ", " SIZET_FORMAT "\n", a_cycle, b_cycle);
