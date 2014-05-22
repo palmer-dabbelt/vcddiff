@@ -237,7 +237,16 @@ std::vector<std::string> vcd::all_long_names(void) const
     return out;
 }
 
+std::string vcd::long_name_to_bits(const std::string& long_name)
+{
+    auto l = _long_name.find(long_name);
+    if (l == _long_name.end())
+        return "";
+    return l->second->text();
+}
+
 bool str_start(std::string h, std::string n)
 {
     return (strncmp(h.c_str(), n.c_str(), strlen(n.c_str())) == 0);
 }
+

@@ -95,6 +95,9 @@ namespace libvcd
 
         /* Returns a list of every signal in this VCD file. */
         std::vector<std::string> all_long_names(void) const;
+
+        /* Looks up the data of a long name. */
+        std::string long_name_to_bits(const std::string& long_name);
     };
 }
 
