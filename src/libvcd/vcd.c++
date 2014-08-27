@@ -36,7 +36,7 @@ static bool str_start(std::string haystack, std::string needle);
 /* Returns TRUE if the line consists entirely of white space. */
 static bool all_white_p(const char *s);
 
-vcd::vcd(const std::string filename)
+vcd::vcd(const std::string filename, int raise_signals)
     : _short_name(),
       _long_name(),
       _file(NULL),
@@ -50,6 +50,7 @@ vcd::vcd(const std::string filename)
     }
 
     const longname *stack = NULL;
+    int module_level = 0;
 
     char buffer[LINE_MAX];
     size_t line = 0;
@@ -84,6 +85,12 @@ vcd::vcd(const std::string filename)
                 fprintf(stderr, "  Expected 'reg' or 'wire' as first token\n");
                 abort();
             }
+
+            if (stack == NULL) {
+                fprintf(stderr, "Cannot add signal %s at level %d\n",
+                        l, module_level);
+                abort();
+            }
             
             /* Adds this newly-discovered datum to both maps for later
              * use by step() and diff(). */
@@ -98,15 +105,19 @@ vcd::vcd(const std::string filename)
                 abort();
             }
 
-            stack = new longname(strdup(module), stack);
+            module_level++;
+            if (module_level > raise_signals)
+                stack = new longname(strdup(module), stack);
         } else if (str_start(buffer, "$upscope ")) {
-            if (stack == NULL) {
+            if (module_level <= 0) {
                 fprintf(stderr, "Too many upscope at line " SIZET_FORMAT "\n",
                         line);
                 abort();
             }
 
-            stack = stack->parent();
+            if (stack != NULL)
+                stack = stack->parent();
+            module_level--;
         } else if (str_start(buffer, "#")) {
             this->_has_more_cycles = true;
             if (sscanf(buffer, "#" SIZET_FORMAT, &this->_next_cycle) != 1) {

@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <getopt.h>
 #include "version.h"
 
 /* This global signal determines if we should print the current cycle
@@ -48,31 +49,64 @@ static void sig_diff(const std::string signal,
 
 static void val_diff(const std::string signal) __attribute__((unused));
 
-int main(int argc, const char **argv)
+void print_usage(FILE *f)
 {
-    if (argc == 2 && (strcmp(argv[1], "--version") == 0)) {
-        printf("vcddiff " VCDDIFF_VERSION "\n");
-        exit(0);
-    }
-
-    if ((argc == 2 && (strcmp(argv[1], "--help") == 0)) || argc != 3) {
-        printf("vcddiff <a.vcd> <b.vcd>: diffs two VCD files\n"
+    fprintf(f, "vcddiff <a.vcd> <b.vcd>: diffs two VCD files\n"
                "  vcddiff is like diff, but it understands some VCD\n"
                "  semantics.  As such, it can deal with differently\n"
                "  named and ordered signals.\n"
                "\n"
+               "  --raise-a-signals Number of module levels to raise"
+               " signals in file a\n"
+               "  --raise-b-signals Number of module levels to raise"
+               " signals in file b\n"
                "  --version: Print the version number and exit\n"
-               "  --help:    Print this help text and exit\n"
-            );
-        exit(0);
+               "  --help:    Print this help text and exit\n");
+}
+
+int main(int argc, char *argv[])
+{
+    struct option options[] = {
+        {"version", 0, NULL, 'v'},
+        {"help", 0, NULL, 'h'},
+        {"raise-a-signals", 1, NULL, 'a'},
+        {"raise-b-signals", 1, NULL, 'b'},
+        {NULL, 0, NULL, 0}
+    };
+    int raise_a_signals = 0, raise_b_signals = 0;
+    int opt;
+
+    while ((opt = getopt_long(argc, argv, "", options, NULL)) > 0) {
+        switch (opt) {
+        case 'v':
+            printf("vcddiff " VCDDIFF_VERSION "\n");
+            exit(0);
+        case 'h':
+            print_usage(stdout);
+            exit(0);
+        case 'a':
+            raise_a_signals = atoi(optarg);
+            break;
+        case 'b':
+            raise_b_signals = atoi(optarg);
+            break;
+        default:
+            print_usage(stderr);
+            exit(EXIT_FAILURE);
+        }
     }
 
-    a_filename = argv[1];
-    b_filename = argv[2];
+    if (optind + 1 >= argc) {
+        print_usage(stderr);
+        exit(EXIT_FAILURE);
+    }
+
+    a_filename = argv[optind];
+    b_filename = argv[optind + 1];
 
     /* Open the two files that we were given. */
-    libvcd::vcd a(a_filename);
-    libvcd::vcd b(b_filename);
+    libvcd::vcd a(a_filename, raise_a_signals);
+    libvcd::vcd b(b_filename, raise_b_signals);
 
     /* Read the given files all the way through. */
     any_failures = false;

@@ -63,7 +63,7 @@ namespace libvcd
 
     public:
         /* Generates a new VCD file that reads from the given filename. */
-        vcd(const std::string filename);
+        vcd(const std::string filename, int raise_signals = 0);
 
         ~vcd(void);
 
