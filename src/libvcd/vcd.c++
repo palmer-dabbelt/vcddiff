@@ -141,7 +141,7 @@ vcd::vcd(const std::string filename, int raise_signals)
         } else {
             fprintf(stderr, "Unknown line in '%s'\n", filename.c_str());
             fprintf(stderr, "  line: '%s'", buffer);
-            fprintf(stderr, "  line number: %lu\n", line);
+            fprintf(stderr, "  line number: " SIZET_FORMAT "\n", line);
             abort();
         }
 
