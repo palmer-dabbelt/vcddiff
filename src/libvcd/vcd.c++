@@ -31,7 +31,7 @@ using namespace libvcd;
 #endif
 
 /* Returns TRUE if haystack starts with needle. */
-bool str_start(std::string haystack, std::string needle);
+static bool str_start(std::string haystack, std::string needle);
 
 /* Returns TRUE if the line consists entirely of white space. */
 static bool all_white_p(const char *s);
