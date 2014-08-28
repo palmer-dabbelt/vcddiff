@@ -67,13 +67,21 @@ vcd::vcd(const std::string filename)
         if (str_start(buffer, "$comment")) {
             continue;
         } else if (str_start(buffer, "$var")) {
-            char w[LINE_MAX], s[LINE_MAX], l[LINE_MAX];
+            char t[LINE_MAX], w[LINE_MAX], s[LINE_MAX], l[LINE_MAX];
 
-            if (sscanf(buffer, "$var wire %s %s %s $end", w, s, l) != 3) {
+            if (sscanf(buffer, "$var %s %s %s %s $end", t, w, s, l) != 4) {
                 fprintf(stderr, "Unable to parse variable from '%s'\n", buffer);
                 abort();
             }
 
+            if (strcmp(t, "reg") == 0) {
+            } else if (strcmp(t, "wire") == 0) {
+            } else {
+                fprintf(stderr, "Unexpected token in '%s'\n", buffer);
+                fprintf(stderr, "  Expected 'reg' or 'wire' as first token\n");
+                abort();
+            }
+            
             /* Adds this newly-discovered datum to both maps for later
              * use by step() and diff(). */
             auto d = new datum();
