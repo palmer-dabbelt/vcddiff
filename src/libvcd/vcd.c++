@@ -194,10 +194,26 @@ void vcd::step(void)
          * such. */
         char name[LINE_MAX];
         char value[LINE_MAX];
-        if (sscanf(buffer, "%s %s", value, name) != 2) {
-            fprintf(stderr, "Unable to parse name/value pair from '%s'\n",
-                    buffer);
-            abort();
+
+        /* Apparently there's a few formats of name/value pairs in VCD
+         * files. */
+        if (buffer[0] == 'b') {
+            /* A 'b' indicates a space-seperated list. */
+            if (sscanf(buffer, "%s %s", value, name) != 2) {
+                fprintf(stderr, "Unable to parse name/value pair from '%s'\n",
+                        buffer);
+                abort();
+            }
+        } else if (buffer[0] == '1' || buffer[0] == '0') {
+            /* Some 1-bit signals just omit the space. */
+            value[0] = 'b';
+            value[2] = '\0';
+
+            if (sscanf(buffer, "%c%s", &value[1], name) != 2) {
+                fprintf(stderr, "Unable to parse name/value pair from '%s'\n",
+                        buffer);
+                abort();
+            }
         }
 
         /* Ensure that there's a matching value for this short name. */
