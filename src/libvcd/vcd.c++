@@ -183,6 +183,12 @@ void vcd::step(void)
         if (str_start(buffer, "$comment"))
             continue;
 
+        /* Here we just silently ignore dumpvars/end pairs. */
+        if (str_start(buffer, "$dumpvars"))
+            continue;
+        if (str_start(buffer, "$end"))
+            continue;
+
         /* If there's no special case to deal with then just go ahead
          * and assume this is a name/value pair and parse it as
          * such. */
