@@ -88,7 +88,7 @@ vcd::vcd(const std::string filename)
             /* Adds this newly-discovered datum to both maps for later
              * use by step() and diff(). */
             auto d = new datum();
-            this->_short_name[strdup(s)] = d;
+            this->_short_name.insert(std::make_pair(strdup(s), d));
             this->_long_name[stack->c_str(l)] = d;
         } else if (str_start(buffer, "$scope ")) {
             char module[LINE_MAX];
@@ -231,7 +231,8 @@ void vcd::step(void)
         }
 
         /* Overwrite the current value with the updated value. */
-        *datum->second = value;
+        for (size_t i = 0; i < this->_short_name.count(name); ++i, ++datum)
+            *datum->second = value;
     }
 }
 

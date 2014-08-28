@@ -37,7 +37,7 @@ namespace libvcd
         /* This maps a short name to a datum.  This map is used when
          * reading the values from the VCD file, as here the values
          * are tagged with the short name. */
-        std::map<const std::string, datum *> _short_name;
+        std::multimap<const std::string, datum *> _short_name;
 
         /* This maps the long name of of an entry to its current
          * value.  The idea here is that we need to be able to compare
