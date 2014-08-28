@@ -33,6 +33,9 @@ using namespace libvcd;
 /* Returns TRUE if haystack starts with needle. */
 bool str_start(std::string haystack, std::string needle);
 
+/* Returns TRUE if the line consists entirely of white space. */
+static bool all_white_p(const char *s);
+
 vcd::vcd(const std::string filename)
     : _short_name(),
       _long_name(),
@@ -123,6 +126,7 @@ vcd::vcd(const std::string filename)
             needs_end = true;
         } else if (str_start(buffer, "$end")) {
             needs_end = false;
+        } else if (all_white_p(buffer) == true) {
         } else {
             fprintf(stderr, "Unknown line in '%s'\n", filename.c_str());
             fprintf(stderr, "%s", buffer);
@@ -280,3 +284,11 @@ bool str_start(std::string h, std::string n)
     return (strncmp(h.c_str(), n.c_str(), strlen(n.c_str())) == 0);
 }
 
+bool all_white_p(const char *s)
+{
+    for (size_t i = 0; i < strlen(s); ++i)
+        if (isspace(s[i]) == false)
+            return false;
+
+    return true;
+}

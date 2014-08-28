@@ -53,6 +53,7 @@ TESTSRC     += syntax-multi_line_end.bash
 TESTSRC     += syntax-reg_or_wire.bash
 TESTSRC     += syntax-date.bash
 TESTSRC     += syntax-version.bash
+TESTSRC     += syntax-blank_line.bash
 
 # Lists the signals present in a VCD file
 BINARIES    += vcdsigs
