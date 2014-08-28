@@ -117,6 +117,8 @@ vcd::vcd(const std::string filename)
             needs_end = true;
         } else if (str_start(buffer, "$dumpvars")) {
             needs_end = true;
+        } else if (str_start(buffer, "$date")) {
+            needs_end = true;
         } else if (str_start(buffer, "$end")) {
             needs_end = false;
         } else {

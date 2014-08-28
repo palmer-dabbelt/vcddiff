@@ -51,6 +51,7 @@ TESTSRC     += counter-1sig1diff.bash
 
 TESTSRC     += syntax-multi_line_end.bash
 TESTSRC     += syntax-reg_or_wire.bash
+TESTSRC     += syntax-date.bash
 
 # Lists the signals present in a VCD file
 BINARIES    += vcdsigs
