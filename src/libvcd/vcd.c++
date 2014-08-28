@@ -50,9 +50,20 @@ vcd::vcd(const std::string filename)
 
     char buffer[LINE_MAX];
     size_t line = 0;
+    bool waiting_for_end = false;
     while (fgets(buffer, LINE_MAX, _file) != NULL) {
         line++;
 
+        /* Check to see if we're inside some multi-line block that I
+         * just don't bother with and should therefor ignore pretty
+         * much everything. */
+        if (waiting_for_end == true) {
+            if (str_start(buffer, "$end"))
+                waiting_for_end = false;
+            continue;
+        }
+
+        bool needs_end = false;
         if (str_start(buffer, "$comment")) {
             continue;
         } else if (str_start(buffer, "$var")) {
@@ -92,15 +103,22 @@ vcd::vcd(const std::string filename)
                 abort();
             }
             goto done;
-        } else if (str_start(buffer, "$timescale ")) {
-        } else if (str_start(buffer, "$enddefinitions ")) {
+        } else if (str_start(buffer, "$timescale")) {
+            needs_end = true;
+        } else if (str_start(buffer, "$enddefinitions")) {
+            needs_end = true;
         } else if (str_start(buffer, "$dumpvars")) {
+            needs_end = true;
         } else if (str_start(buffer, "$end")) {
+            needs_end = false;
         } else {
             fprintf(stderr, "Unknown line in '%s'\n", filename.c_str());
             fprintf(stderr, "%s", buffer);
             abort();
         }
+
+        if ((needs_end == true) && (strstr(buffer, "$end") == NULL))
+            waiting_for_end = true;
     }
 
 done:
