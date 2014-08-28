@@ -38,15 +38,15 @@ fi
 
 set -e
 
-if [[ "$(diff $RETGOLD $TMP/ret)" != "" ]]
-then
-    cat $TMP/ret
-    exit 1
-fi
-
 if [[ "$(diff $OUTGOLD $TMP/out)" != "" ]]
 then
     cat $TMP/out
+    exit 1
+fi
+
+if [[ "$(diff $RETGOLD $TMP/ret)" != "" ]]
+then
+    cat $TMP/ret
     exit 1
 fi
 
