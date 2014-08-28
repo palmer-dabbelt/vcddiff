@@ -129,7 +129,8 @@ vcd::vcd(const std::string filename)
         } else if (all_white_p(buffer) == true) {
         } else {
             fprintf(stderr, "Unknown line in '%s'\n", filename.c_str());
-            fprintf(stderr, "%s", buffer);
+            fprintf(stderr, "  line: '%s'", buffer);
+            fprintf(stderr, "  line number: %lu\n", line);
             abort();
         }
 
@@ -197,6 +198,7 @@ void vcd::step(void)
         auto datum = this->_short_name.find(name);
         if (datum == this->_short_name.end()) {
             fprintf(stderr, "Found unknown short name: '%s'\n", name);
+            fprintf(stderr, "  line: '%s'\n", buffer);
 
             fprintf(stderr, "Short names found:\n");
             for (auto it = _short_name.begin(); it != _short_name.end(); it++) {
