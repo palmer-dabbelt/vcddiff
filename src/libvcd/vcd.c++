@@ -215,7 +215,9 @@ void vcd::step(void)
                         buffer);
                 abort();
             }
-        } else if (buffer[0] == '1' || buffer[0] == '0') {
+        } else if (buffer[0] == '1' || buffer[0] == '0'
+                   || buffer[0] == 'x' || buffer[0] == 'z'
+                   || buffer[0] == 'X' || buffer[0] == 'Z') {
             /* Some 1-bit signals just omit the space. */
             value[0] = 'b';
             value[2] = '\0';
