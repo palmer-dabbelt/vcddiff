@@ -57,6 +57,7 @@ TESTSRC     += syntax-blank_line.bash
 TESTSRC     += syntax-dumpvars.bash
 TESTSRC     += syntax-one_bit.bash
 TESTSRC     += syntax-multi_map.bash
+TESTSRC     += syntax-multi_set.bash
 
 # Lists the signals present in a VCD file
 BINARIES    += vcdsigs
