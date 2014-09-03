@@ -47,8 +47,9 @@ namespace libvcd
         datum(void);
 
         /* Builds a new datum, given some text from a VCD file that
-         * represents the value. */
-        datum(const std::string text);
+         * represents the value and, optionally, a boolean
+         * indicating whether the text should be considered valid */
+        datum(const std::string text, bool valid = true);
 
         /* Accessor functions. */
         const std::string text(void) const { return this->_text; }
@@ -74,6 +75,12 @@ namespace libvcd
         /* Returns TRUE if this values has ever changed, which means
          * it's been set when it's already been valid. */
         bool changed(void) const { return _changed; }
+
+        /* Returns the number of bits in this datum */
+        size_t width(void) const;
+
+        /* Set a bit in this datum */
+        void setbit(int pos, char bit);
     };
 
     bool operator==(const datum &a, const datum &b);

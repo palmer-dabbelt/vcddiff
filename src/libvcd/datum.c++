@@ -32,8 +32,8 @@ datum::datum(void)
 {
 }
 
-datum::datum(const std::string text)
-    : _valid(true),
+datum::datum(const std::string text, bool valid)
+    : _valid(valid),
       _changed(false),
       _text(text)
 {
@@ -45,6 +45,19 @@ datum& datum::operator=(const std::string new_text)
     this->_valid = true;
     this->_text = new_text;
     return *this;
+}
+
+size_t datum::width(void) const
+{
+    if (_text[0] == 'b')
+        return _text.length() - 1;
+    return 1;
+}
+
+void datum::setbit(int pos, char bit)
+{
+    this->_valid = true;
+    this->_text[pos + 1] = bit;
 }
 
 bool libvcd::operator==(const datum &a, const datum &b)
