@@ -119,11 +119,12 @@ vcd::vcd(const std::string filename, int raise_signals)
                 stack = stack->parent();
             module_level--;
         } else if (str_start(buffer, "#")) {
-            this->_has_more_cycles = true;
             if (sscanf(buffer, "#" SIZET_FORMAT, &this->_next_cycle) != 1) {
                 fprintf(stderr, "Unable to parse cycle from '%s'\n", buffer);
                 abort();
             }
+            this->_has_more_cycles = true;
+            this->_cycle = this->_next_cycle - 1;
             goto done;
         } else if (str_start(buffer, "$timescale")) {
             needs_end = true;
@@ -169,9 +170,13 @@ void vcd::step(void)
         abort();
     }
 
-    /* Remove that cached next cycle value. */
+    /* Move to the next cycle, checking to see if the VCD file has
+     * skipped a cycle.  If it has skipped a cycle then we simply
+     * return here, as that just means nothing has changed at all. */
+    this->_cycle++;
+    if (this->_cycle != this->_next_cycle)
+        return;
     this->_has_more_cycles = false;
-    this->_cycle = this->_next_cycle;
 
     /* Read the input file until we find another cycle deliminator.  If
      * we don't find one then that means the file is over, which is OK
