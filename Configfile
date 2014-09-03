@@ -59,6 +59,7 @@ TESTSRC     += syntax-one_bit.bash
 TESTSRC     += syntax-multi_map.bash
 TESTSRC     += syntax-multi_set.bash
 TESTSRC     += syntax-skip_cycle.bash
+TESTSRC     += syntax-skip_many_cycles.bash
 
 # Lists the signals present in a VCD file
 BINARIES    += vcdsigs
