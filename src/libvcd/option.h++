@@ -21,6 +21,8 @@
 #ifndef OPTION_HXX
 #define OPTION_HXX
 
+#include <stdlib.h>
+
 namespace libvcd
 {
     /* represents a value which may or may not exists */
