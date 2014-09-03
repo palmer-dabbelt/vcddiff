@@ -36,6 +36,22 @@ static bool str_start(std::string haystack, std::string needle);
 /* Returns TRUE if the line consists entirely of white space. */
 static bool all_white_p(const char *s);
 
+/* Return the bit position that the signal is selecting.
+ * If this is not a bit selection, return an invalid option */
+static option<int> parse_bitsel(const char *sel) {
+    int bit;
+
+    // if the string is of the form [7:0]
+    // this is not a bit selection
+    if (strchr(sel, ':'))
+        return option<int>();
+
+    if (sscanf(sel, "[%d]", &bit) == 1)
+        return option<int>(bit);
+
+    return option<int>();
+}
+
 vcd::vcd(const std::string filename, int raise_signals)
     : _short_name(),
       _long_name(),
@@ -71,9 +87,12 @@ vcd::vcd(const std::string filename, int raise_signals)
         if (str_start(buffer, "$comment")) {
             continue;
         } else if (str_start(buffer, "$var")) {
-            char t[LINE_MAX], w[LINE_MAX], s[LINE_MAX], l[LINE_MAX];
+            int w;
+            char t[LINE_MAX], s[LINE_MAX],
+                 l[LINE_MAX], b[LINE_MAX];
 
-            if (sscanf(buffer, "$var %s %s %s %s $end", t, w, s, l) != 4) {
+            if (sscanf(buffer, "$var %s %d %s %s %s $end",
+                        t, &w, s, l, b) != 5) {
                 fprintf(stderr, "Unable to parse variable from '%s'\n", buffer);
                 abort();
             }
@@ -91,12 +110,25 @@ vcd::vcd(const std::string filename, int raise_signals)
                         l, module_level);
                 abort();
             }
-            
+
             /* Adds this newly-discovered datum to both maps for later
              * use by step() and diff(). */
-            auto d = new datum();
-            this->_short_name.insert(std::make_pair(strdup(s), d));
-            this->_long_name[stack->c_str(l)] = d;
+            std::string lname = stack->c_str(l);
+            auto bit = parse_bitsel(b);
+            auto a = new alias(lname, bit);
+            this->_short_name.insert(std::make_pair(strdup(s), a));
+            if (w != 1 || !bit.valid()) {
+                /* if this is the whole signal and not just a single
+                 * bit in it, create an empty datum */
+                this->_long_name[lname] = new datum();
+            } else if (this->_long_name.find(lname) == this->_long_name.end()) {
+                /* If it is a single bit in a larger signal and this
+                 * is the first bit found, pre-allocate the bit string,
+                 * setting the bits to X. */
+                std::string str(bit.value() + 2, 'X');
+                str[0] = 'b';
+                this->_long_name[lname] = new datum(str, false);
+            }
         } else if (str_start(buffer, "$scope ")) {
             char module[LINE_MAX];
 
@@ -235,8 +267,8 @@ void vcd::step(void)
         }
 
         /* Ensure that there's a matching value for this short name. */
-        auto datum = this->_short_name.find(name);
-        if (datum == this->_short_name.end()) {
+        auto entry = this->_short_name.find(name);
+        if (entry == this->_short_name.end()) {
             fprintf(stderr, "Found unknown short name: '%s'\n", name);
             fprintf(stderr, "  line: '%s'\n", buffer);
 
@@ -249,8 +281,21 @@ void vcd::step(void)
         }
 
         /* Overwrite the current value with the updated value. */
-        for (size_t i = 0; i < this->_short_name.count(name); ++i, ++datum)
-            *datum->second = value;
+        for (size_t i = 0; i < this->_short_name.count(name); ++i, ++entry) {
+            auto alias = entry->second;
+            auto datum = this->_long_name[alias->fullname()];
+            if (!alias->bit().valid()) {
+                *datum = value;
+            } else if (alias->bit().value() < (int) datum->width()) {
+                auto ind = datum->width() - alias->bit().value() - 1;
+                datum->setbit(ind, value[1]);
+            } else {
+                fprintf(stderr, "Bit index %d outside width "
+                            SIZET_FORMAT " for shortname %s\n",
+                            alias->bit().value(), datum->width(), name);
+                abort();
+            }
+        }
     }
 }
 
