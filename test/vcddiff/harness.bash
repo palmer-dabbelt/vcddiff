@@ -15,15 +15,21 @@ export TMPA="$TMP/a.vcd"
 export TMPB="$TMP/b.vcd"
 export RETGOLD="$TMP/ret.gold"
 export OUTGOLD="$TMP/out.gold"
+export ARGS_FILE="$TMP/args"
+
+# make sure the file exists
+touch $ARGS_FILE
 
 ARCHIVE=`awk '/^__ARCHIVE_BELOW__/ {print NR + 1; exit 0; }' $0`
 tail -n+$ARCHIVE $0 | bash -ex
+
+export TEST_ARGS="$(cat $ARGS_FILE)"
 
 set +e
 
 if [[ "$1" == "--valgrind" ]]
 then
-    valgrind -q $PTEST_BINARY $TMPA $TMPB > $TMP/out 2> $TMP/valgrind
+    valgrind -q $PTEST_BINARY $TEST_ARGS $TMPA $TMPB > $TMP/out 2> $TMP/valgrind
     echo "$?" > $TMP/ret
     
     cat $TMP/valgrind
@@ -32,7 +38,7 @@ then
         exit 1
     fi
 else
-    $PTEST_BINARY $TMPA $TMPB > $TMP/out
+    $PTEST_BINARY $TEST_ARGS $TMPA $TMPB > $TMP/out
     echo "$?" > $TMP/ret
 fi
 
