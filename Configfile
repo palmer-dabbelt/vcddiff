@@ -62,6 +62,9 @@ TESTSRC     += syntax-skip_cycle.bash
 TESTSRC     += syntax-skip_many_cycles.bash
 TESTSRC     += syntax-bitwise.bash
 
+TESTSRC     += flags-raising_signals.bash
+TESTSRC     += flags-tspc.bash
+
 # Lists the signals present in a VCD file
 BINARIES    += vcdsigs
 SOURCES     += vcdsigs.c++
