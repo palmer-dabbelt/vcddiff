@@ -60,6 +60,8 @@ void print_usage(FILE *f)
                " signals in file a\n"
                "  --raise-b-signals Number of module levels to raise"
                " signals in file b\n"
+               "  --a-tspc Number of timesteps per cycle in file a\n"
+               "  --b-tspc Number of timesteps per cycle in file b\n"
                "  --version: Print the version number and exit\n"
                "  --help:    Print this help text and exit\n");
 }
@@ -71,9 +73,12 @@ int main(int argc, char *argv[])
         {"help", 0, NULL, 'h'},
         {"raise-a-signals", 1, NULL, 'a'},
         {"raise-b-signals", 1, NULL, 'b'},
+        {"a-tspc", 1, NULL, 'c'},
+        {"b-tspc", 1, NULL, 'd'},
         {NULL, 0, NULL, 0}
     };
     int raise_a_signals = 0, raise_b_signals = 0;
+    int a_tspc = 1, b_tspc = 1;
     int opt;
 
     while ((opt = getopt_long(argc, argv, "", options, NULL)) > 0) {
@@ -90,6 +95,12 @@ int main(int argc, char *argv[])
         case 'b':
             raise_b_signals = atoi(optarg);
             break;
+        case 'c':
+            a_tspc = atoi(optarg);
+            break;
+        case 'd':
+            b_tspc = atoi(optarg);
+            break;
         default:
             print_usage(stderr);
             exit(EXIT_FAILURE);
@@ -105,8 +116,8 @@ int main(int argc, char *argv[])
     b_filename = argv[optind + 1];
 
     /* Open the two files that we were given. */
-    libvcd::vcd a(a_filename, raise_a_signals);
-    libvcd::vcd b(b_filename, raise_b_signals);
+    libvcd::vcd a(a_filename, raise_a_signals, a_tspc);
+    libvcd::vcd b(b_filename, raise_b_signals, b_tspc);
 
     /* Read the given files all the way through. */
     any_failures = false;

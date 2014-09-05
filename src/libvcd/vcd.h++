@@ -62,9 +62,14 @@ namespace libvcd
          * this file, and FALSE otherwise. */
         bool _has_more_cycles;
 
+        /* Number of verilog timesteps in a single clock cycle */
+        int _tspc;
+
     public:
         /* Generates a new VCD file that reads from the given filename. */
-        vcd(const std::string filename, int raise_signals = 0);
+        vcd(const std::string filename,
+                int raise_signals = 0,
+                int tspc = 1);
 
         ~vcd(void);
 

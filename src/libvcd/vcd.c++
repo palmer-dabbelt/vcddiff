@@ -40,11 +40,12 @@ static bool all_white_p(const char *s);
  * If this is not a bit selection, return an invalid option */
 static option<int> parse_bitsel(const char *sel);
 
-vcd::vcd(const std::string filename, int raise_signals)
+vcd::vcd(const std::string filename, int raise_signals, int tspc)
     : _short_name(),
       _long_name(),
       _file(NULL),
-      _has_more_cycles(false)
+      _has_more_cycles(false),
+      _tspc(tspc)
 {
     _file = fopen(filename.c_str(), "r");
     if (_file == NULL) {
@@ -144,7 +145,7 @@ vcd::vcd(const std::string filename, int raise_signals)
                 abort();
             }
             this->_has_more_cycles = true;
-            this->_cycle = this->_next_cycle - 1;
+            this->_cycle = this->_next_cycle - tspc;
             goto done;
         } else if (str_start(buffer, "$timescale")) {
             needs_end = true;
@@ -193,7 +194,7 @@ void vcd::step(void)
     /* Move to the next cycle, checking to see if the VCD file has
      * skipped a cycle.  If it has skipped a cycle then we simply
      * return here, as that just means nothing has changed at all. */
-    this->_cycle++;
+    this->_cycle += _tspc;
     if (this->_cycle != this->_next_cycle)
         return;
     this->_has_more_cycles = false;
