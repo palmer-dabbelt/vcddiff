@@ -30,6 +30,8 @@ HEADERS     += libvcd/longname.h++
 SOURCES     += libvcd/longname.h++
 HEADERS     += libvcd/vcd.h++
 SOURCES     += libvcd/vcd.h++
+HEADERS     += libvcd/alias.h++
+SOURCES     += libvcd/alias.h++
 
 LIBRARIES   += libvcd.so
 SOURCES     += libvcd/vcd.c++
